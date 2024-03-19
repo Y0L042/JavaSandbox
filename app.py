@@ -38,19 +38,38 @@ def compile_java_sources(src_dir, lib_dir, bin_dir):
     stdlib_jar_path = os.path.join(bin_dir, "stdlib.jar")
     compile_java_library_to_jar(algs4_src_dir, bin_dir, "algs4.jar", classpath=stdlib_jar_path)
 
-def compile_and_run_app(src_dir, bin_dir, lib_dir):
-    # Compile App.java with warnings suppressed, adjusting classpath to include the bin directory and the created .jar files
+# def compile_app(src_dir, bin_dir, lib_dir):
+#     # Compile App.java with warnings suppressed, adjusting classpath to include the bin directory and the created .jar files
+#     jar_files = ":".join([os.path.join(bin_dir, f) for f in os.listdir(bin_dir) if f.endswith(".jar")])
+#     classpath = f"{bin_dir}:{jar_files}" if jar_files else bin_dir
+#     subprocess.run(["javac", "-Xlint:none", "-cp", classpath, "-d", bin_dir, os.path.join(src_dir, "*.java")], check=True)
+
+def compile_app(src_dir, bin_dir, lib_dir):
+    # Initialize the javac command with options
+    javac_command = ["javac", "-Xlint:none"]
+
+    # Set the classpath to include the bin directory and any .jar files
     jar_files = ":".join([os.path.join(bin_dir, f) for f in os.listdir(bin_dir) if f.endswith(".jar")])
     classpath = f"{bin_dir}:{jar_files}" if jar_files else bin_dir
-    subprocess.run(["javac", "-Xlint:none", "-cp", classpath, "-d", bin_dir, os.path.join(src_dir, "App.java")], check=True)
+    javac_command.extend(["-cp", classpath])
 
-    # Run the compiled App class, including the classpath to the bin directory and any .jar files in bin
-    run_app("App", bin_dir, lib_dir)
+    # Specify the output directory for compiled .class files
+    javac_command.extend(["-d", bin_dir])
 
-def run_app(class_name, bin_dir, lib_dir):
+    # Walk through the src_dir to find and compile all .java files
+    for root, dirs, files in os.walk(src_dir):
+        for file in files:
+            if file.endswith(".java"):
+                java_file_path = os.path.join(root, file)
+                javac_command.append(java_file_path)
+
+    # Compile all .java files found in src_dir
+    subprocess.run(javac_command, check=True)
+
+def run_app(class_name, bin_dir, lib_dir, args):
     jar_files = ":".join([os.path.join(bin_dir, f) for f in os.listdir(bin_dir) if f.endswith(".jar")])
     classpath = f"{bin_dir}:{jar_files}" if jar_files else bin_dir
-    subprocess.run(["java", "-cp", classpath, class_name], check=True)
+    subprocess.run(["java", "-cp", classpath, class_name] + args, check=True)
 
 def main():
     project_dir = PROJECT_DIR
@@ -65,8 +84,9 @@ def main():
         # Compile Java libraries into .jar files
         compile_java_sources(src_dir, lib_dir, bin_dir)
     else:
-        # Compile and run the application with all warnings suppressed
-        compile_and_run_app(src_dir, bin_dir, lib_dir)
+        # Compile and run the application with all warnings suppressed, passing along additional arguments
+        compile_app(src_dir, bin_dir, lib_dir)
+        run_app("App", bin_dir, lib_dir, sys.argv[1:])
 
 if __name__ == "__main__":
     main()

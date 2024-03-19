@@ -7,6 +7,6 @@ class App {
     }
 
     void run(String[] args) {
-        System.out.println("Hello, World!");
+        Trees_Study.main(args);
     }
 }
