@@ -1,0 +1,12 @@
+# Files to Ignore
+*.class
+
+# Folders to Ignore
+bin/*
+
+# Files to Keep
+!bin/.gitkeep
+!in/.gitkeep
+!lib/.gitkeep
+!out/.gitkeep
+!src/.gitkeep
