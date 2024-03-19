@@ -3,6 +3,7 @@
 
 # Folders to Ignore
 bin/*
+backups/*
 
 # Files to Keep
 !bin/.gitkeep
