@@ -50,7 +50,7 @@ public class Trees_Study {
     }
 
     void testBinarySearchTree(ArrayList<Integer> array) {
-        BinarySearchST<Integer, Integer> bst = new BinarySearchST<>();
+        BinarySearchST<Integer, Integer> bst = new BinarySearchST<>(valueCount);
         timer.start();
         for (int i = 0; i < array.size(); i++) {
             bst.put(array.get(i), array.get(i) * 10);

@@ -10,6 +10,16 @@ public class Utils {
         return list;
     }
 
+    public static ArrayList<String> readStringFile(String filePath) {
+        In input = new In(filePath);
+        ArrayList<String> list = new ArrayList<>();
+        while (!input.isEmpty()) {
+            list.add(String.valueOf(input.readString()));
+        }
+        return list;
+    }
+
+
     public static void writeRandomIntegers(String filename, Integer count) {
         Out out = new Out(filename);
         for (int i = 0; i < count; i++) {
