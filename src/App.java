@@ -8,6 +8,7 @@ class App {
 
     void run(String[] args) {
         // Trees_Study.main(args);
-        PasswordChecker.main(args);
+        // PasswordChecker.main(args);
+        MazeGenerator.main(args);
     }
 }

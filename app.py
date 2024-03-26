@@ -62,14 +62,20 @@ def compile_app(src_dir, bin_dir, lib_dir):
             if file.endswith(".java"):
                 java_file_path = os.path.join(root, file)
                 javac_command.append(java_file_path)
-
+                
+    print("\n" + " ".join(javac_command) + "\n")
+    
     # Compile all .java files found in src_dir
     subprocess.run(javac_command, check=True)
 
 def run_app(class_name, bin_dir, lib_dir, args):
     jar_files = ":".join([os.path.join(bin_dir, f) for f in os.listdir(bin_dir) if f.endswith(".jar")])
     classpath = f"{bin_dir}:{jar_files}" if jar_files else bin_dir
-    subprocess.run(["java", "-cp", classpath, class_name] + args, check=True)
+    command = ["java", "-cp", classpath, class_name] + args
+    
+    print(" " + " ".join(command) + "\n")
+    
+    subprocess.run(command, check=True)
 
 def main():
     project_dir = PROJECT_DIR
